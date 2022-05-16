@@ -39,7 +39,7 @@ class HomeTile extends StatelessWidget {
                 height: 5,
               ),
               Text(
-                product.type!,
+                product.category!,
                 style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(
