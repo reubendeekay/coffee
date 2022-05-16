@@ -130,7 +130,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   height: size.height * 0.26,
                   child: Image.network(
                     widget.product.imageUrl!,
-                    fit: BoxFit.cover,
+                    height: size.height * 0.26,
+                    fit: BoxFit.fitHeight,
                   )),
             ],
           ),

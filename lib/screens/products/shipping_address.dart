@@ -73,6 +73,17 @@ class ShippingAddressScreen extends StatelessWidget {
             width: double.infinity,
             child: RaisedButton(
               onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    backgroundColor: kPrimary,
+                    content: Text(
+                      'Successful purchase',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                );
                 Get.to(() => const SuccessScreen());
               },
               color: kPrimary,

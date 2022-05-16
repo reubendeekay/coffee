@@ -13,17 +13,31 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
 
   @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      await Provider.of<AuthProvider>(context, listen: false).getUser();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Provider.of<AuthProvider>(context, listen: false).getUser();
     final user = Provider.of<AuthProvider>(context, listen: false).user;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: ListView(
+          shrinkWrap: true,
           children: [
             const SizedBox(height: 20),
             Row(
@@ -49,7 +63,8 @@ class Homepage extends StatelessWidget {
             SizedBox(
               height: 210,
               child: StreamBuilder<QuerySnapshot>(
-                  stream: productRef.snapshots(),
+                  stream:
+                      productRef.where('type', isEqualTo: 'top').snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(
@@ -64,7 +79,7 @@ class Homepage extends StatelessWidget {
                       child: Row(
                           children: docs
                               .map((e) =>
-                                  HomeTile(product: ProductModel.fromJson(e)))
+                                  HomeCard(product: ProductModel.fromJson(e)))
                               .toList()),
                     );
                   }),
@@ -91,7 +106,25 @@ class Homepage extends StatelessWidget {
               'Featured Beverages',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            // ...List.generate(5, (index) => const HomeTile())
+            StreamBuilder<QuerySnapshot>(
+                stream:
+                    productRef.where('type', isEqualTo: 'featured').snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  List<DocumentSnapshot> docs = snapshot.data!.docs;
+                  return ListView(
+                      shrinkWrap: true,
+                      children: List.generate(
+                          docs.length,
+                          (index) => HomeTile(
+                                product: ProductModel.fromJson(docs[index]),
+                              )));
+                })
           ],
         ),
       ),

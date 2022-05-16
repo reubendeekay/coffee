@@ -54,7 +54,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           height: 10,
         ),
         MyTextField(
-          hintText: 'Category',
+          hintText: 'top or featured',
           onChanged: (val) {
             setState(() {
               type = val;
