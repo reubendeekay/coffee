@@ -20,7 +20,7 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-  String? name, type;
+  String? name, type, category;
   double? price;
   XFile? image;
 
@@ -58,6 +58,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
           onChanged: (val) {
             setState(() {
               type = val;
+            });
+          },
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        MyTextField(
+          hintText: 'Category',
+          onChanged: (val) {
+            setState(() {
+              category = val;
             });
           },
         ),
@@ -123,13 +134,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                     try {
                       final upload = await FirebaseStorage.instance
-                          .ref('products/images/')
+                          .ref(
+                              'products/images/${DateTime.now().millisecondsSinceEpoch}')
                           .putFile(File(image!.path));
                       final downloadUrl = await upload.ref.getDownloadURL();
 
                       final product = ProductModel(
                         name: name,
                         type: type,
+                        category: category,
                         imageUrl: downloadUrl,
                         price: price,
                       );

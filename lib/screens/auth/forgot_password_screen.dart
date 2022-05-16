@@ -1,10 +1,17 @@
 import 'package:coffee/constants.dart';
 import 'package:coffee/screens/auth/widgets/my_text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
+class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
 
+  @override
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  String? email;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +38,11 @@ class ForgotPasswordScreen extends StatelessWidget {
                 ),
                 MyTextField(
                   hintText: 'Email Id',
-                  onChanged: (val) {},
+                  onChanged: (val) {
+                    setState(() {
+                      email = val;
+                    });
+                  },
                 ),
                 const SizedBox(
                   height: 40,
@@ -39,8 +50,13 @@ class ForgotPasswordScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: RaisedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      await FirebaseAuth.instance
+                          .sendPasswordResetEmail(email: email!);
                       Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: const Text('Link sent to your email id'),
+                      ));
                     },
                     color: kPrimary,
                     child: const Text('SUBMIT',

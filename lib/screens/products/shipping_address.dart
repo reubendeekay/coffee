@@ -1,11 +1,36 @@
 import 'package:coffee/constants.dart';
+import 'package:coffee/models/my_loader.dart';
+import 'package:coffee/models/order_model.dart';
+import 'package:coffee/models/product_model.dart';
+import 'package:coffee/providers/order_provider.dart';
 import 'package:coffee/screens/auth/widgets/my_text_field.dart';
 import 'package:coffee/screens/products/success_scree.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:provider/provider.dart';
 
-class ShippingAddressScreen extends StatelessWidget {
-  const ShippingAddressScreen({Key? key}) : super(key: key);
+class ShippingAddressScreen extends StatefulWidget {
+  const ShippingAddressScreen(
+      {Key? key,
+      required this.pickup,
+      required this.product,
+      this.size,
+      this.quantity,
+      this.amount})
+      : super(key: key);
+  final String pickup;
+  final String? size;
+  final ProductModel product;
+  final double? amount;
+  final int? quantity;
+
+  @override
+  State<ShippingAddressScreen> createState() => _ShippingAddressScreenState();
+}
+
+class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
+  String? name, address, city, code, country;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +53,22 @@ class ShippingAddressScreen extends StatelessWidget {
         child: ListView(children: [
           MyTextField(
             hintText: 'Your Name',
-            onChanged: (val) {},
+            onChanged: (val) {
+              setState(() {
+                name = val;
+              });
+            },
           ),
           const SizedBox(
             height: 10,
           ),
           MyTextField(
             hintText: 'Address',
-            onChanged: (val) {},
+            onChanged: (val) {
+              setState(() {
+                address = val;
+              });
+            },
           ),
           const SizedBox(
             height: 10,
@@ -45,7 +78,11 @@ class ShippingAddressScreen extends StatelessWidget {
               Expanded(
                 child: MyTextField(
                   hintText: 'City',
-                  onChanged: (val) {},
+                  onChanged: (val) {
+                    setState(() {
+                      city = val;
+                    });
+                  },
                 ),
               ),
               const SizedBox(
@@ -54,7 +91,11 @@ class ShippingAddressScreen extends StatelessWidget {
               Expanded(
                 child: MyTextField(
                   hintText: 'Pincode',
-                  onChanged: (val) {},
+                  onChanged: (val) {
+                    setState(() {
+                      code = val;
+                    });
+                  },
                 ),
               ),
             ],
@@ -64,7 +105,11 @@ class ShippingAddressScreen extends StatelessWidget {
           ),
           MyTextField(
             hintText: 'Country',
-            onChanged: (val) {},
+            onChanged: (val) {
+              setState(() {
+                country = val;
+              });
+            },
           ),
           const SizedBox(
             height: 50,
@@ -72,7 +117,28 @@ class ShippingAddressScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: RaisedButton(
-              onPressed: () {
+              onPressed: () async {
+                final order = OrderModel(
+                  name: name,
+                  address: address,
+                  city: city,
+                  pinCode: code,
+                  country: country,
+                  pickup: widget.pickup,
+                  amount: widget.amount,
+                  quantity: widget.quantity,
+                  product: widget.product,
+                  size: widget.size,
+                );
+                setState(() {
+                  isLoading = true;
+                });
+
+                await Provider.of<OrderProvider>(context, listen: false)
+                    .postOrder(order);
+                setState(() {
+                  isLoading = false;
+                });
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     backgroundColor: kPrimary,
@@ -84,13 +150,15 @@ class ShippingAddressScreen extends StatelessWidget {
                     ),
                   ),
                 );
-                Get.to(() => const SuccessScreen());
+                Get.off(() => const SuccessScreen());
               },
               color: kPrimary,
-              child: const Text(
-                'SUBMIT',
-                style: TextStyle(color: Colors.white),
-              ),
+              child: isLoading
+                  ? const MyLoader()
+                  : const Text(
+                      'SUBMIT',
+                      style: TextStyle(color: Colors.white),
+                    ),
             ),
           )
         ]),

@@ -99,7 +99,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   width: double.infinity,
                   child: RaisedButton(
                     onPressed: () {
-                      Get.to(() => const DeliveryModeScreen());
+                      Get.to(() => DeliveryModeScreen(
+                            product: widget.product,
+                            size: options[selectedindex],
+                            amount: amount * price,
+                            quantity: amount,
+                          ));
                     },
                     color: kPrimary,
                     child: const Text(
@@ -131,7 +136,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   child: Image.network(
                     widget.product.imageUrl!,
                     height: size.height * 0.26,
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.cover,
                   )),
             ],
           ),

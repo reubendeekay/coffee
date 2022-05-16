@@ -1,10 +1,17 @@
 import 'package:coffee/constants.dart';
+import 'package:coffee/models/product_model.dart';
 import 'package:coffee/screens/products/shipping_address.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
 class DeliveryModeScreen extends StatefulWidget {
-  const DeliveryModeScreen({Key? key}) : super(key: key);
+  const DeliveryModeScreen(
+      {Key? key, required this.product, this.size, this.amount, this.quantity})
+      : super(key: key);
+  final String? size;
+  final double? amount;
+  final int? quantity;
+  final ProductModel product;
 
   @override
   State<DeliveryModeScreen> createState() => _DeliveryModeScreenState();
@@ -65,7 +72,13 @@ class _DeliveryModeScreenState extends State<DeliveryModeScreen> {
               width: double.infinity,
               child: RaisedButton(
                 onPressed: () {
-                  Get.to(() => const ShippingAddressScreen());
+                  Get.to(() => ShippingAddressScreen(
+                        pickup: options[selectedindex],
+                        product: widget.product,
+                        size: widget.size,
+                        amount: widget.amount,
+                        quantity: widget.quantity,
+                      ));
                 },
                 color: kPrimary,
                 child: const Text(

@@ -8,6 +8,7 @@ import 'package:coffee/screens/home/add_product.dart';
 import 'package:coffee/screens/home/category_card.dart';
 import 'package:coffee/screens/home/home_card.dart';
 import 'package:coffee/screens/home/home_tile.dart';
+import 'package:coffee/screens/home/orders_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -47,6 +48,13 @@ class _HomepageState extends State<Homepage> {
                   style: TextStyle(fontSize: 15, fontStyle: FontStyle.italic),
                 ),
                 const Spacer(),
+                InkWell(
+                  onTap: () {
+                    Get.to(() => const OrdersScreen());
+                  },
+                  child: const Icon(Icons.sell_outlined),
+                ),
+                const SizedBox(width: 10),
                 InkWell(
                     onTap: () async {
                       await FirebaseAuth.instance.signOut();
@@ -119,6 +127,7 @@ class _HomepageState extends State<Homepage> {
                   List<DocumentSnapshot> docs = snapshot.data!.docs;
                   return ListView(
                       shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       children: List.generate(
                           docs.length,
                           (index) => HomeTile(
