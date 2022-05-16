@@ -2,6 +2,7 @@ import 'package:coffee/app_splash.dart';
 import 'package:coffee/constants.dart';
 import 'package:coffee/firebase_options.dart';
 import 'package:coffee/providers/auth_provider.dart';
+import 'package:coffee/providers/product_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
       ],
       child: GetMaterialApp(
         title: 'Coffee App',

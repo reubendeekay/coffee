@@ -1,10 +1,13 @@
 import 'package:coffee/constants.dart';
+import 'package:coffee/models/product_model.dart';
 import 'package:coffee/screens/products/delivery_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({Key? key}) : super(key: key);
+  const ProductDetailsScreen({Key? key, required this.product})
+      : super(key: key);
+  final ProductModel product;
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -31,9 +34,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Ice chocolate coffee',
-                  style: TextStyle(fontSize: 18),
+                Text(
+                  widget.product.name!,
+                  style: const TextStyle(fontSize: 18),
                 ),
                 const SizedBox(
                   height: 30,
@@ -125,8 +128,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             children: [
               SizedBox(
                   height: size.height * 0.26,
-                  child: Image.asset(
-                    'assets/images/coffee.png',
+                  child: Image.network(
+                    widget.product.imageUrl!,
                     fit: BoxFit.cover,
                   )),
             ],

@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee/constants.dart';
+import 'package:coffee/models/product_model.dart';
 import 'package:coffee/providers/auth_provider.dart';
+import 'package:coffee/providers/product_provider.dart';
 import 'package:coffee/screens/auth/login.dart';
+import 'package:coffee/screens/home/add_product.dart';
 import 'package:coffee/screens/home/category_card.dart';
 import 'package:coffee/screens/home/home_card.dart';
 import 'package:coffee/screens/home/home_tile.dart';
@@ -13,6 +18,7 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<AuthProvider>(context, listen: false).getUser();
     final user = Provider.of<AuthProvider>(context, listen: false).user;
     return Scaffold(
       body: Padding(
@@ -32,7 +38,7 @@ class Homepage extends StatelessWidget {
                       await FirebaseAuth.instance.signOut();
                       Get.offAll(() => const SignInScreen());
                     },
-                    child: Icon(Icons.logout)),
+                    child: const Icon(Icons.logout)),
               ],
             ),
             Text(
@@ -42,17 +48,26 @@ class Homepage extends StatelessWidget {
             const SizedBox(height: 25),
             SizedBox(
               height: 210,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: const [
-                    HomeCard(),
-                    HomeCard(),
-                    HomeCard(),
-                    HomeCard(),
-                  ],
-                ),
-              ),
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: productRef.snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    List<DocumentSnapshot> docs = snapshot.data!.docs;
+
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                          children: docs
+                              .map((e) =>
+                                  HomeTile(product: ProductModel.fromJson(e)))
+                              .toList()),
+                    );
+                  }),
             ),
             const SizedBox(height: 40),
             const Text(
@@ -76,10 +91,16 @@ class Homepage extends StatelessWidget {
               'Featured Beverages',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            ...List.generate(5, (index) => const HomeTile())
+            // ...List.generate(5, (index) => const HomeTile())
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          backgroundColor: kPrimary,
+          onPressed: () {
+            Get.to(() => const AddProductScreen());
+          }),
     );
   }
 }
