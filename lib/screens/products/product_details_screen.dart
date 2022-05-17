@@ -20,6 +20,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int groupIndex = 0;
   int amount = 1;
   double price = 5.5;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -54,6 +55,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           setState(() {
                             selectedindex = index;
                             groupIndex = index;
+                            if (selectedindex > 0) {
+                              price = 5.5 + (selectedindex) * 1.5;
+                            } else {
+                              price = 5.5;
+                            }
                           });
                         })),
                 const SizedBox(height: 30),
