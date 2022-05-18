@@ -6,7 +6,8 @@ import 'package:coffee/screens/home/home_tile.dart';
 import 'package:flutter/material.dart';
 
 class ProductsScreen extends StatelessWidget {
-  const ProductsScreen({Key? key}) : super(key: key);
+  const ProductsScreen({Key? key, required this.title}) : super(key: key);
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +15,9 @@ class ProductsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Container(
           color: kPrimary,
-          child: const Text(
-            'Products',
-            style: TextStyle(color: Colors.white),
+          child: Text(
+            title + ' Products',
+            style: const TextStyle(color: Colors.white),
           ),
         ),
         centerTitle: true,
@@ -25,7 +26,7 @@ class ProductsScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: StreamBuilder<QuerySnapshot>(
-          stream: productRef.snapshots(),
+          stream: productRef.where('category', isEqualTo: title).snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Center(

@@ -141,8 +141,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                       final product = ProductModel(
                         name: name,
-                        type: type,
-                        category: category,
+                        type: type!.trim().toLowerCase(),
+                        category: category!.trim(),
                         imageUrl: downloadUrl,
                         price: price,
                       );

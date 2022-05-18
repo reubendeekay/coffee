@@ -100,14 +100,42 @@ class _HomepageState extends State<Homepage> {
             const SizedBox(height: 20),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Row(
-                children: const [
-                  CategoryCard(),
-                  CategoryCard(),
-                  CategoryCard(),
-                  CategoryCard(),
-                ],
-              ),
+              child: FutureBuilder<QuerySnapshot>(
+                  future: productRef.get(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final docs = snapshot.data!.docs;
+
+                      List finaldocs = [];
+
+                      for (var i = 0; i < docs.length; i++) {
+                        if (!finaldocs.contains(docs[i]['category'])) {
+                          finaldocs.add(docs[i]['category']);
+                        }
+                      }
+
+                      return Row(
+                          children: finaldocs
+                              .map((e) => CategoryCard(
+                                    amount: docs
+                                        .where((element) =>
+                                            element['category'] == e)
+                                        .length
+                                        .toString(),
+                                    title: e,
+                                  ))
+                              .toList());
+                    }
+
+                    return Row(
+                      children: const [
+                        CategoryCard(),
+                        CategoryCard(),
+                        CategoryCard(),
+                        CategoryCard(),
+                      ],
+                    );
+                  }),
             ),
             const SizedBox(height: 40),
             const Text(

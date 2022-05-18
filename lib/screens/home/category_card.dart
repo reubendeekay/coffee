@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
 class CategoryCard extends StatelessWidget {
-  const CategoryCard({Key? key}) : super(key: key);
+  const CategoryCard({Key? key, this.title, this.amount}) : super(key: key);
+  final String? title, amount;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const ProductsScreen());
+        Get.to(() => ProductsScreen(
+              title: title!,
+            ));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 35),
@@ -27,19 +30,19 @@ class CategoryCard extends StatelessWidget {
             SizedBox(height: 30, child: Image.asset('assets/images/cof.png')),
             const SizedBox(width: 20),
             Column(
-              children: const [
+              children: [
                 Text(
-                  'Beverages',
-                  style: TextStyle(
+                  title ?? 'Beverages',
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Text(
-                  '67 Menus',
-                  style: TextStyle(
+                  '${amount ?? '2'} Menus',
+                  style: const TextStyle(
                     color: kPrimary,
                   ),
                 ),
