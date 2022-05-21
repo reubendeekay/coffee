@@ -1,8 +1,11 @@
 import 'package:coffee/constants.dart';
 import 'package:coffee/models/product_model.dart';
+import 'package:coffee/providers/cart_provider.dart';
+import 'package:coffee/screens/home/cart_icon.dart';
 import 'package:coffee/screens/products/delivery_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({Key? key, required this.product})
@@ -19,11 +22,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int selectedindex = 0;
   int groupIndex = 0;
   int amount = 1;
-  double price = 5.5;
+  late double? price;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    price = widget.product.price;
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final cart = Provider.of<CartProvider>(context, listen: false);
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,16 +68,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             selectedindex = index;
                             groupIndex = index;
                             if (selectedindex > 0) {
-                              price = 5.5 + (selectedindex) * 1.5;
-                            } else {
-                              price = 5.5;
+                              price = price! * ((selectedindex) * 1.5);
                             }
                           });
                         })),
                 const SizedBox(height: 30),
                 Row(
                   children: [
-                    Text('\$${(price * amount).toStringAsFixed(2)}',
+                    Text('\$${(price! * amount).toStringAsFixed(2)}',
                         style: const TextStyle(fontSize: 20)),
                     const Spacer(),
                     InkWell(
@@ -90,6 +100,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         setState(() {
                           amount++;
                         });
+
+                        cart.addToCart(widget.product);
                       },
                       child: const Icon(
                         Icons.add,
@@ -105,12 +117,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   width: double.infinity,
                   child: RaisedButton(
                     onPressed: () {
-                      Get.to(() => DeliveryModeScreen(
-                            product: widget.product,
-                            size: options[selectedindex],
-                            amount: amount * price,
-                            quantity: amount,
-                          ));
+                      Get.to(() => const DeliveryModeScreen());
                     },
                     color: kPrimary,
                     child: const Text(
@@ -169,9 +176,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               const SizedBox(
-                width: 40,
+                width: 30,
               ),
               const Spacer(),
+              CartIcon(color: Colors.white),
+              const SizedBox(
+                width: 10,
+              ),
             ],
           ),
         )

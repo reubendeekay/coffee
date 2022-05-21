@@ -1,28 +1,20 @@
 import 'package:coffee/constants.dart';
 import 'package:coffee/models/my_loader.dart';
 import 'package:coffee/models/order_model.dart';
-import 'package:coffee/models/product_model.dart';
-import 'package:coffee/providers/order_provider.dart';
+import 'package:coffee/providers/cart_provider.dart';
 import 'package:coffee/screens/auth/widgets/my_text_field.dart';
-import 'package:coffee/screens/products/success_scree.dart';
+import 'package:coffee/screens/payment_method.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
 
 class ShippingAddressScreen extends StatefulWidget {
-  const ShippingAddressScreen(
-      {Key? key,
-      required this.pickup,
-      required this.product,
-      this.size,
-      this.quantity,
-      this.amount})
-      : super(key: key);
+  const ShippingAddressScreen({
+    Key? key,
+    required this.pickup,
+  }) : super(key: key);
   final String pickup;
-  final String? size;
-  final ProductModel product;
-  final double? amount;
-  final int? quantity;
 
   @override
   State<ShippingAddressScreen> createState() => _ShippingAddressScreenState();
@@ -34,6 +26,8 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<CartProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: Container(
@@ -125,32 +119,12 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                   pinCode: code,
                   country: country,
                   pickup: widget.pickup,
-                  amount: widget.amount,
-                  quantity: widget.quantity,
-                  product: widget.product,
-                  size: widget.size,
+                  amount: cart.cart!.totalPrice!,
+                  cart: cart.cart,
+                  userId: FirebaseAuth.instance.currentUser!.uid,
                 );
-                setState(() {
-                  isLoading = true;
-                });
 
-                await Provider.of<OrderProvider>(context, listen: false)
-                    .postOrder(order);
-                setState(() {
-                  isLoading = false;
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    backgroundColor: kPrimary,
-                    content: Text(
-                      'Successful purchase',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                );
-                Get.off(() => const SuccessScreen());
+                Get.to(() => PaymentMethod(order: order));
               },
               color: kPrimary,
               child: isLoading

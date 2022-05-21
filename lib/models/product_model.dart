@@ -5,11 +5,15 @@ class ProductModel {
   final String? category;
   final double? price;
   final String? imageUrl;
+  String? size;
+  int quantity;
 
   ProductModel(
       {this.id,
       this.name,
       this.category,
+      this.size = 'small',
+      this.quantity = 0,
       this.type,
       this.price,
       this.imageUrl});
@@ -21,6 +25,8 @@ class ProductModel {
         type: json["type"],
         price: json["price"].toDouble(),
         imageUrl: json["imageUrl"],
+        size: json["size"],
+        quantity: json["quantity"],
       );
   factory ProductModel.fromMap(dynamic json) => ProductModel(
         name: json["name"],
@@ -28,6 +34,8 @@ class ProductModel {
         type: json["type"],
         price: json["price"].toDouble(),
         imageUrl: json["imageUrl"],
+        size: json["size"],
+        quantity: json["quantity"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -36,5 +44,7 @@ class ProductModel {
         "price": price,
         "imageUrl": imageUrl,
         "category": category,
+        "size": size,
+        "quantity": quantity,
       };
 }

@@ -5,6 +5,7 @@ import 'package:coffee/providers/auth_provider.dart';
 import 'package:coffee/providers/product_provider.dart';
 import 'package:coffee/screens/auth/login.dart';
 import 'package:coffee/screens/home/add_product.dart';
+import 'package:coffee/screens/home/cart_icon.dart';
 import 'package:coffee/screens/home/category_card.dart';
 import 'package:coffee/screens/home/home_card.dart';
 import 'package:coffee/screens/home/home_tile.dart';
@@ -48,6 +49,10 @@ class _HomepageState extends State<Homepage> {
                   style: TextStyle(fontSize: 15, fontStyle: FontStyle.italic),
                 ),
                 const Spacer(),
+                const CartIcon(),
+                const SizedBox(
+                  width: 10,
+                ),
                 InkWell(
                   onTap: () {
                     Get.to(() => const OrdersScreen());
@@ -64,7 +69,7 @@ class _HomepageState extends State<Homepage> {
               ],
             ),
             Text(
-              user!.userName ?? 'William',
+              user == null ? 'William' : user.userName!,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 25),

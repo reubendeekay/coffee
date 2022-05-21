@@ -2,6 +2,7 @@ import 'package:coffee/app_splash.dart';
 import 'package:coffee/constants.dart';
 import 'package:coffee/firebase_options.dart';
 import 'package:coffee/providers/auth_provider.dart';
+import 'package:coffee/providers/cart_provider.dart';
 import 'package:coffee/providers/order_provider.dart';
 import 'package:coffee/providers/product_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: GetMaterialApp(
         title: 'Coffee App',

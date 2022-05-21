@@ -3,6 +3,7 @@ import 'package:coffee/constants.dart';
 import 'package:coffee/models/order_model.dart';
 import 'package:coffee/providers/order_provider.dart';
 import 'package:coffee/screens/home/order_details_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
@@ -42,7 +43,9 @@ class OrdersScreen extends StatelessWidget {
             );
           }
         }),
-        stream: orderRef.snapshots(),
+        stream: orderRef
+            .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .snapshots(),
       ),
     );
   }
@@ -58,10 +61,10 @@ class OrderWidget extends StatelessWidget {
       onTap: () {
         Get.to(() => OrderDetailsScreen(order: order));
       },
-      leading:
-          CircleAvatar(backgroundImage: NetworkImage(order.product!.imageUrl!)),
-      title: Text(order.product!.name!),
-      subtitle: Text('Quantity: x${order.quantity!}'),
+      leading: CircleAvatar(
+          backgroundImage: NetworkImage(order.cart!.products!.first.imageUrl!)),
+      title: Text('Order #' + order.id!),
+      subtitle: Text('Quantity: x${order.address!}'),
       trailing: Text('\$${order.amount!}'),
     );
   }

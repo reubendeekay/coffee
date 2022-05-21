@@ -1,5 +1,6 @@
 import 'package:coffee/constants.dart';
 import 'package:coffee/models/order_model.dart';
+import 'package:coffee/screens/home/cart_screen.dart';
 import 'package:coffee/screens/home/home_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -23,28 +24,35 @@ class OrderDetailsScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: ListView(
+      body: Padding(
         padding: const EdgeInsets.all(15),
-        children: [
-          Container(
-            color: Colors.white,
-            child: HomeTile(
-              product: order.product!,
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: List.generate(
+                    order.cart!.products!.length,
+                    (index) => CartWidget(
+                          product: order.cart!.products![index],
+                        )),
+              ),
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          myText('Order ID', order.id!),
-          myText('Quantity', order.quantity!.toString()),
-          myText('Size', order.size!.toString()),
-          myText('Name', order.name!),
-          myText('Address', order.address!),
-          myText('Pin Code', order.pinCode!),
-          myText('City', order.city!),
-          myText('Country', order.country!),
-          myText('Mode of Pickup', order.pickup!),
-        ],
+            const SizedBox(
+              height: 10,
+            ),
+            Column(
+              children: [
+                myText('Order ID', order.id!),
+                myText('Name', order.name!),
+                myText('Address', order.address!),
+                myText('Pin Code', order.pinCode!),
+                myText('City', order.city!),
+                myText('Country', order.country!),
+                myText('Mode of Pickup', order.pickup!),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
