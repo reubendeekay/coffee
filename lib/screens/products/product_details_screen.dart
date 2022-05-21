@@ -67,16 +67,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           setState(() {
                             selectedindex = index;
                             groupIndex = index;
-                            if (selectedindex > 0) {
-                              price = price! * ((selectedindex) * 1.5);
-                            }
                           });
                         })),
                 const SizedBox(height: 30),
                 Row(
                   children: [
-                    Text('\$${(price! * amount).toStringAsFixed(2)}',
-                        style: const TextStyle(fontSize: 20)),
+                    selectedindex > 0
+                        ? Text(
+                            '\$${(price! * amount * selectedindex * 1.5).toStringAsFixed(2)}',
+                            style: const TextStyle(fontSize: 20))
+                        : Text('\$${(price! * amount).toStringAsFixed(2)}',
+                            style: const TextStyle(fontSize: 20)),
                     const Spacer(),
                     InkWell(
                       onTap: () {
@@ -84,6 +85,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           setState(() {
                             amount--;
                           });
+                          cart.removeFromCart(widget.product);
                         }
                       },
                       child: const Icon(
@@ -100,7 +102,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         setState(() {
                           amount++;
                         });
-
+                        widget.product.price = selectedindex > 0
+                            ? price! * amount * selectedindex * 1.5
+                            : price! * amount;
                         cart.addToCart(widget.product);
                       },
                       child: const Icon(

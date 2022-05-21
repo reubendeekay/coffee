@@ -3,7 +3,7 @@ class ProductModel {
   final String? name;
   final String? type;
   final String? category;
-  final double? price;
+  double? price;
   final String? imageUrl;
   String? size;
   int quantity;

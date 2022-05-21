@@ -36,9 +36,27 @@ class CartScreen extends StatelessWidget {
         Container(
           color: Colors.white,
           width: double.infinity,
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(15),
           child: Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      cart.clearCart();
+                    },
+                    child: const Text(
+                      'Clear Cart',
+                      style: TextStyle(
+                          color: Colors.red, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 12,
+              ),
               Row(
                 children: [
                   const Text(
