@@ -2,7 +2,9 @@ import 'package:coffee/constants.dart';
 import 'package:coffee/models/order_model.dart';
 import 'package:coffee/screens/home/cart_screen.dart';
 import 'package:coffee/screens/home/home_tile.dart';
+import 'package:coffee/screens/payment_method.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   const OrderDetailsScreen({Key? key, required this.order}) : super(key: key);
@@ -49,6 +51,17 @@ class OrderDetailsScreen extends StatelessWidget {
                 myText('City', order.city!),
                 myText('Country', order.country!),
                 myText('Mode of Pickup', order.pickup!),
+                const SizedBox(
+                  height: 10,
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    Get.to(() => PaymentMethod(order: order));
+                  },
+                  color: kPrimary,
+                  textColor: Colors.white,
+                  child: const Text('Order again'),
+                )
               ],
             ),
           ],

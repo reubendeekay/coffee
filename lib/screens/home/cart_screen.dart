@@ -28,9 +28,20 @@ class CartScreen extends StatelessWidget {
         Expanded(
             child: ListView(
           children: List.generate(
-              cart.cart!.products!.length,
-              (index) => CartWidget(
-                    product: cart.cart!.products![index],
+              cart.cart == null ? 0 : cart.cart!.products!.length,
+              (index) => Dismissible(
+                    key: Key(cart.cart!.products![index].id!),
+                    onDismissed: (direction) {
+                      cart.removeProduct(cart.cart!.products![index]);
+                    },
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                    ),
+                    child: CartWidget(
+                      product: cart.cart!.products![index],
+                    ),
                   )),
         )),
         Container(
@@ -65,7 +76,9 @@ class CartScreen extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    '\$${cart.cart!.totalPrice!.toStringAsFixed(2)}',
+                    cart.cart == null
+                        ? '\$ 0'
+                        : '\$${cart.cart!.totalPrice!.toStringAsFixed(2)}',
                     style: const TextStyle(fontSize: 16),
                   ),
                 ],

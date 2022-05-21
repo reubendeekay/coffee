@@ -47,6 +47,17 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeProduct(ProductModel product) {
+    if (_cart!.products!.contains(product)) {
+      _cart!.products!.remove(product);
+      quantity = quantity - product.quantity;
+      _cart!.totalPrice =
+          _cart!.totalPrice! - product.price! * product.quantity;
+    }
+
+    notifyListeners();
+  }
+
   void clearCart() {
     _cart = CartModel(
       totalPrice: 0,

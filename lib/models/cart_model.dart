@@ -1,7 +1,7 @@
 import 'package:coffee/models/product_model.dart';
 
 class CartModel {
-  List<ProductModel>? products;
+  List<ProductModel>? products = [];
   double? totalPrice;
 
   CartModel({this.totalPrice, this.products});
