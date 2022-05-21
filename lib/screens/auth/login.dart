@@ -20,6 +20,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   String? _email, _password;
   bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +58,7 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               MyTextField(
                 hintText: 'Password',
+                isPassword: true,
                 onChanged: (val) {
                   setState(() {
                     _password = val;
