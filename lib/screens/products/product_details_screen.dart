@@ -117,7 +117,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   width: double.infinity,
                   child: RaisedButton(
                     onPressed: () {
-                      Get.to(() => const DeliveryModeScreen());
+                      if (cart.cart!.products!.isNotEmpty) {
+                        Get.to(() => const DeliveryModeScreen());
+                      } else {
+                        cart.addToCart(widget.product);
+                        Get.to(() => const DeliveryModeScreen());
+                      }
                     },
                     color: kPrimary,
                     child: const Text(
