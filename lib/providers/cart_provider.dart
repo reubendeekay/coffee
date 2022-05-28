@@ -27,9 +27,12 @@ class CartProvider with ChangeNotifier {
       );
       quantity = 1;
     } else {
-      _cart!.products!.contains(product)
+      _cart!.products!
+              .where((e) => product.id == e.id && product.size == e.size)
+              .isNotEmpty
           ? _cart!.products!
-              .firstWhere((element) => element == product)
+              .firstWhere((element) =>
+                  element.size == product.size && element.id == product.id)
               .quantity++
           : _cart!.products!.add(product);
       _cart!.totalPrice = _cart!.totalPrice! + product.price!;

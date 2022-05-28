@@ -130,7 +130,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ? price! * amount * selectedindex * 1.5
                             : price! * amount;
                         product.size = options[selectedindex];
+                        print(product.price);
                         cart.addToCart(product);
+                        setState(() {
+                          amount = 1;
+                        });
                       }
 
                       Get.to(() => const CartScreen());
