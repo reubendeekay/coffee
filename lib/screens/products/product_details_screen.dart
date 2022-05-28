@@ -106,6 +106,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         widget.product.price = selectedindex > 0
                             ? price! * amount * selectedindex * 1.5
                             : price! * amount;
+
+                        widget.product.size = options[selectedindex];
                         cart.addToCart(widget.product);
                       },
                       child: const Icon(
@@ -127,6 +129,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         product.price = selectedindex > 0
                             ? price! * amount * selectedindex * 1.5
                             : price! * amount;
+                        product.size = options[selectedindex];
                         cart.addToCart(product);
                       }
 
