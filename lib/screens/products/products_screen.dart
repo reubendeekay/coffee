@@ -16,7 +16,7 @@ class ProductsScreen extends StatelessWidget {
         title: Container(
           color: kPrimary,
           child: Text(
-            title + ' Products',
+            title,
             style: const TextStyle(color: Colors.white),
           ),
         ),

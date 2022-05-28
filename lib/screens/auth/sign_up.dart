@@ -66,6 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               MyTextField(
                 hintText: 'Password',
+                isPassword: true,
                 onChanged: (val) {
                   setState(() {
                     _password = val;

@@ -7,6 +7,16 @@ class CartProvider with ChangeNotifier {
 
   CartModel? get cart => _cart;
 
+  double getTotalPrice() {
+    double totalPrice = 0;
+    if (_cart != null) {
+      for (var product in _cart!.products!) {
+        totalPrice += product.price! * product.quantity;
+      }
+    }
+    return totalPrice;
+  }
+
   int quantity = 0;
 
   void addToCart(ProductModel product) {
@@ -53,16 +63,14 @@ class CartProvider with ChangeNotifier {
       quantity = quantity - product.quantity;
       _cart!.totalPrice =
           _cart!.totalPrice! - product.price! * product.quantity;
+      _cart!.totalPrice! < 0 ? _cart!.totalPrice != 0 : _cart!.totalPrice!;
     }
 
     notifyListeners();
   }
 
   void clearCart() {
-    _cart = CartModel(
-      totalPrice: 0,
-      products: [],
-    );
+    _cart = null;
     quantity = 0;
     notifyListeners();
   }

@@ -2,6 +2,7 @@ import 'package:coffee/constants.dart';
 import 'package:coffee/models/product_model.dart';
 import 'package:coffee/providers/cart_provider.dart';
 import 'package:coffee/screens/home/cart_icon.dart';
+import 'package:coffee/screens/home/cart_screen.dart';
 import 'package:coffee/screens/products/delivery_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -121,16 +122,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   width: double.infinity,
                   child: RaisedButton(
                     onPressed: () {
-                      if (cart.cart!.products!.isNotEmpty) {
-                        Get.to(() => const DeliveryModeScreen());
-                      } else {
-                        cart.addToCart(widget.product);
-                        Get.to(() => const DeliveryModeScreen());
+                      if (amount <= 1) {
+                        ProductModel product = widget.product;
+                        product.price = selectedindex > 0
+                            ? price! * amount * selectedindex * 1.5
+                            : price! * amount;
+                        cart.addToCart(product);
                       }
+
+                      Get.to(() => const CartScreen());
                     },
                     color: kPrimary,
                     child: const Text(
-                      'PLACE ORDER',
+                      'ADD TO CART',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

@@ -1,7 +1,9 @@
 import 'package:coffee/constants.dart';
 import 'package:coffee/models/product_model.dart';
 import 'package:coffee/providers/cart_provider.dart';
+import 'package:coffee/screens/products/delivery_mode.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatelessWidget {
@@ -38,6 +40,25 @@ class CartScreen extends StatelessWidget {
                     background: Container(
                       color: Colors.red,
                       alignment: Alignment.centerRight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Text(
+                            'Remove',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                        ],
+                      ),
                     ),
                     child: CartWidget(
                       product: cart.cart!.products![index],
@@ -78,7 +99,7 @@ class CartScreen extends StatelessWidget {
                   Text(
                     cart.cart == null
                         ? '\$ 0'
-                        : '\$${cart.cart!.totalPrice!.toStringAsFixed(2)}',
+                        : '\$${cart.getTotalPrice().toStringAsFixed(2)}',
                     style: const TextStyle(fontSize: 16),
                   ),
                 ],
@@ -88,11 +109,17 @@ class CartScreen extends StatelessWidget {
                 height: 48,
                 width: double.infinity,
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: cart.cart == null || cart.getTotalPrice() < 1
+                      ? null
+                      : () async {
+                          Get.to(() => const DeliveryModeScreen());
+                        },
                   color: kPrimary,
-                  child: const Text(
-                    'Proceed to Checkout',
-                    style: TextStyle(color: Colors.white),
+                  child: Text(
+                    cart.cart == null
+                        ? 'Proceed to Checkout'
+                        : 'Proceed to Checkout (\$${cart.getTotalPrice().toStringAsFixed(2)})',
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ),

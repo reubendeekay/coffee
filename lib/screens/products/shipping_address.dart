@@ -119,7 +119,7 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                   pinCode: code,
                   country: country,
                   pickup: widget.pickup,
-                  amount: cart.cart!.totalPrice!,
+                  amount: cart.getTotalPrice(),
                   cart: cart.cart,
                   userId: FirebaseAuth.instance.currentUser!.uid,
                 );

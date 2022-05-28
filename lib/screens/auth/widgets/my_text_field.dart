@@ -31,7 +31,7 @@ class _MyTextFieldState extends State<MyTextField> {
                 ),
                 onTap: () {
                   setState(() {
-                    isVisible = isVisible;
+                    isVisible = !isVisible;
                   });
                 },
               )
